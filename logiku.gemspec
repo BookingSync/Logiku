@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Log formatter lib with performance and adaptability in mind."
   spec.description   = "I've said it all."
-  spec.homepage      = "soon"
+  # spec.homepage      = "soon"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
@@ -21,4 +21,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.12"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rspec", "~> 3.5"
 end

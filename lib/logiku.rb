@@ -1,5 +1,5 @@
 require "logiku/version"
 
 module Logiku
-  # Your code goes here...
+  autoload :Formatters, "logiku/formatters"
 end
