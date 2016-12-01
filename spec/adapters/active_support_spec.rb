@@ -1,9 +1,15 @@
 require "spec_helper"
 
 module Logiku::Normalizers
+  class DummyFormatter
+    def call(data)
+      data
+    end
+  end
+
   RSpec.describe ActiveSupport do
     describe "#call" do
-      let(:normalizer) { ActiveSupport.new }
+      let(:normalizer) { ActiveSupport.new(DummyFormatter.new) }
       let(:severity) { "INFO" }
       let(:timestamp) { Time.now.utc }
       let(:progname) { "foo" }
