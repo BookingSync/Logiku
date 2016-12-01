@@ -1,7 +1,7 @@
 module Logiku::Formatters
   class KeyValue
     def call(data)
-      data.map { |k, v| format k, v }.join " "
+      "#{data.map { |k, v| format k, v }.join(" ")}\n"
     end
 
     private
@@ -13,7 +13,7 @@ module Logiku::Formatters
     def format_value(v)
       case v
       when String
-        v.gsub('"') { %q|\"| }
+        v.gsub(/["\n]/, { '"' => '\"', "\n" => " " })
       when Hash, Array
         v.inspect.gsub('"') { %q|\"| }
       else
