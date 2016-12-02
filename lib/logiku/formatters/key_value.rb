@@ -17,7 +17,7 @@ module Logiku::Formatters
       when Hash, Array
         v.inspect.gsub('"') { %q|\"| }
       when Time
-        v.utc.iso8601
+        v.utc.iso8601(6)
       else
         v.inspect
       end

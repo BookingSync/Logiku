@@ -24,7 +24,7 @@ module Logiku::Formatters
 
         time = Time.now
         expect(formatter.call(time: time))
-          .to eq %Q("time"="#{time.utc.iso8601}"\n)
+          .to eq %Q("time"="#{time.utc.iso8601(6)}"\n)
       end
     end
   end
