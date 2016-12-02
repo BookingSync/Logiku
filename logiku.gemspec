@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["thilonel"]
   spec.email         = ["naitodai@gmail.com"]
 
-  spec.summary       = "Log formatter lib with performance and adaptability in mind."
-  spec.description   = "I've said it all."
-  # spec.homepage      = "soon"
+  spec.summary       = "A log formatter gem."
+  spec.description   = "At BookingSync, we use this to achieve a lean and consistent log output."
+  spec.homepage      = "https://github.com/BookingSync/Logiku"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
