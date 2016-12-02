@@ -11,7 +11,7 @@ module Logiku::Normalizers
     describe "#call" do
       let(:normalizer) { ActiveSupport.new(DummyFormatter.new) }
       let(:severity) { "INFO" }
-      let(:timestamp) { Time.now.utc }
+      let(:timestamp) { Time.now }
       let(:progname) { "foo" }
       let(:message) { { object_id: "123" } }
       let(:data) { normalizer.call severity, timestamp, progname, message }
@@ -20,7 +20,7 @@ module Logiku::Normalizers
         it "creates one hash from arguments, merging message hash into it" do
           expect(data).to eq({
             severity: severity,
-            timestamp: timestamp,
+            time: timestamp,
             progname: progname,
             object_id: "123"
           })
@@ -33,7 +33,7 @@ module Logiku::Normalizers
         it "does not add the message key" do
           expect(data).to eq({
             severity: severity,
-            timestamp: timestamp,
+            time: timestamp,
             progname: progname
           })
         end

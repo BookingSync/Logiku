@@ -10,7 +10,7 @@ module Logiku::Normalizers
       else
         data = {
           severity: severity,
-          timestamp: timestamp,
+          time: timestamp,
           progname: progname
         }
 
