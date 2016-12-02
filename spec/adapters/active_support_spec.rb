@@ -42,13 +42,8 @@ module Logiku::Normalizers
       context "when message is a String" do
         let(:message) { "some string" }
 
-        it "adds it under message key" do
-          expect(data).to eq({
-            severity: severity,
-            timestamp: timestamp,
-            progname: progname,
-            message: message
-          })
+        it "considers it already formatted and returns it as is" do
+          expect(data).to eq message
         end
       end
     end

@@ -5,16 +5,19 @@ module Logiku::Normalizers
     end
 
     def call(severity, timestamp, progname, message)
-      data = {
-        severity: severity,
-        timestamp: timestamp,
-        progname: progname
-      }
+      if message.kind_of? String
+        message
+      else
+        data = {
+          severity: severity,
+          timestamp: timestamp,
+          progname: progname
+        }
 
-      data.merge! message if message.kind_of? Hash
-      data[:message] = message if message.kind_of? String
+        data.merge! message if message.kind_of? Hash
 
-      formatter.call(data.reject { |_, value| value.nil? })
+        formatter.call(data.reject { |_, value| value.nil? })
+      end
     end
 
     private
