@@ -16,6 +16,8 @@ module Logiku::Formatters
         v.gsub(/["\n]/, { '"' => '\"', "\n" => " " })
       when Hash, Array
         v.inspect.gsub('"') { %q|\"| }
+      when Time
+        v.utc.iso8601
       else
         v.inspect
       end

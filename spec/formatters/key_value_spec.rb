@@ -21,6 +21,10 @@ module Logiku::Formatters
 
         expect(formatter.call(array: ["a", "b", "c"]))
           .to eq %Q("array"="[\\"a\\", \\"b\\", \\"c\\"]"\n)
+
+        time = Time.now
+        expect(formatter.call(time: time))
+          .to eq %Q("time"="#{time.utc.iso8601}"\n)
       end
     end
   end
