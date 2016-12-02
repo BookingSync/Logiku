@@ -30,7 +30,7 @@ And finally let's customize `lograge` a bit, by adding `lograge.rb` to the `init
 ```ruby
 Rails.application.configure do
   config.lograge.custom_options = lambda do |event|
-    additions = { time: event.time.utc.iso8601(6) }
+    additions = { time: event.time }
 
     filtered_params = event.payload[:params].except("controller", "action", "format", "protocol")
     additions[:params] = filtered_params.to_json if filtered_params.present?
