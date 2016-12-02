@@ -1,39 +1,68 @@
 # Logiku
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/logiku`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Set up
 
-TODO: Delete this and the text above, and describe your gem
-
-## Installation
-
-Add this line to your application's Gemfile:
+This gem is to be used along with Lograge, so to install add these to your Gemfile:
 
 ```ruby
-gem 'logiku'
+gem "lograge"
+gem "logiku"
 ```
 
 And then execute:
 
     $ bundle
 
-Or install it yourself as:
+I recommend having the same log output for test and production environment, so apply the following settings in `config/environments/test.rb` and `production.rb`:
 
-    $ gem install logiku
+```ruby
+  config.lograge.enabled = true
+  config.lograge.formatter = Logiku::Formatters::KeyValue.new
+  config.logger = ActiveSupport::Logger.new(config.paths["log"].first)
+  config.logger.formatter = Logiku::Normalizers::ActiveSupport.new(Logiku::Formatters::KeyValue.new)
+  config.middleware.delete ActionDispatch::DebugExceptions
+  config.action_mailer.logger = nil
+  config.log_level = :info
+```
+
+And finally let's customize `lograge` a bit, by adding `lograge.rb` to the `initializers`:
+
+```ruby
+Rails.application.configure do
+  config.lograge.custom_options = lambda do |event|
+    additions = { time: event.time.utc.iso8601(6) }
+
+    filtered_params = event.payload[:params].except("controller", "action", "format", "protocol")
+    additions[:params] = filtered_params.to_json if filtered_params.present?
+
+    additions
+  end
+
+  config.lograge.before_format = lambda do |data, payload|
+    data.except(:format, :controller, :action)
+  end
+end
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+For example if you wish to log `deliver.action_mailer` events, you can do it like this:
+```ruby
+ActiveSupport::Notifications.subscribe "deliver.action_mailer" do |*args|
+  event = ActiveSupport::Notifications::Event.new *args
 
-## Development
+  data = {
+    event: event.name,
+    subject: event.payload[:subject],
+    to: event.payload[:to].first
+  }
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+  Rails.logger.info data
+end
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/logiku.
-
+What happens here, is that we pass a `Hash` to `Rails.logger.info`. `Logiku::Normalizers::ActiveSupport` will merge that with `severity, time, progname`, call the formatter passed to it: `Logiku::Formatters::KeyValue.new#call` and this will result in a line like this:
+`"severity"="INFO" "time"="2016-12-02T13:17:37.253203Z" "event"="deliver.action_mailer" "subject"="New HomeAway invoice booking" "to"="email_3@domain.com"`
 
 ## License
 
