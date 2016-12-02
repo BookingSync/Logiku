@@ -10,7 +10,9 @@ module Logiku::Normalizers
         timestamp: timestamp,
         progname: progname
       }
-      data.merge! message unless message.nil?
+
+      data.merge! message if message.kind_of? Hash
+      data[:message] = message if message.kind_of? String
 
       formatter.call(data.reject { |_, value| value.nil? })
     end

@@ -16,23 +16,38 @@ module Logiku::Normalizers
       let(:message) { { object_id: "123" } }
       let(:data) { normalizer.call severity, timestamp, progname, message }
 
-      it "creates one hash from arguments" do
-        expect(data).to eq({
-          severity: severity,
-          timestamp: timestamp,
-          progname: progname,
-          object_id: "123"
-        })
+      context "when message is a hash" do
+        it "creates one hash from arguments, merging message hash into it" do
+          expect(data).to eq({
+            severity: severity,
+            timestamp: timestamp,
+            progname: progname,
+            object_id: "123"
+          })
+        end
       end
 
       context "when message is nil" do
         let(:message) { nil }
 
-        it "still works" do
+        it "does not add the message key" do
           expect(data).to eq({
             severity: severity,
             timestamp: timestamp,
             progname: progname
+          })
+        end
+      end
+
+      context "when message is a String" do
+        let(:message) { "some string" }
+
+        it "adds it under message key" do
+          expect(data).to eq({
+            severity: severity,
+            timestamp: timestamp,
+            progname: progname,
+            message: message
           })
         end
       end
