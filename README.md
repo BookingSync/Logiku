@@ -1,4 +1,5 @@
 # Logiku
+[![Build Status](https://travis-ci.org/BookingSync/Logiku.svg?branch=master)](https://travis-ci.org/BookingSync/Logiku)
 
 ## Set up
 
