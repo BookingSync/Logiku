@@ -1,7 +1,15 @@
 module Logiku::Formatters
   class KeyValue
+    attr_reader :filter
+
+    def initialize(filter = nil)
+      @filter = filter
+    end
+
     def call(data)
-      "#{data.map { |k, v| format k, v }.join(" ")}\n"
+      message = "#{data.map { |k, v| format k, v }.join(" ")}\n"
+      message = filter.call(message) unless filter.nil?
+      message
     end
 
     private

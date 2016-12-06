@@ -26,6 +26,21 @@ module Logiku::Formatters
         expect(formatter.call(time: time))
           .to eq %Q("time"="#{time.utc.iso8601(6)}"\n)
       end
+
+      context "when initialized with a filter" do
+        class DummyFilter
+          def call(message)
+            message.gsub("secret", "FILTERED")
+          end
+        end
+
+        let(:formatter) { KeyValue.new(DummyFilter.new) }
+
+        it "applies it after formatting" do
+          expect(formatter.call({ user: "joe", password: "secret" }))
+            .to eq %Q("user"="joe" "password"="FILTERED"\n)
+        end
+      end
     end
   end
 end
