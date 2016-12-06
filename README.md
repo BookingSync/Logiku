@@ -17,6 +17,7 @@ And then execute:
 I recommend having the same log output for test and production environment, so apply the following settings in `config/environments/test.rb` and `production.rb`:
 
 ```ruby
+  config.action_dispatch.show_exceptions = false
   config.lograge.enabled = true
   config.lograge.formatter = Logiku::Formatters::KeyValue.new
   config.logger = ActiveSupport::Logger.new(config.paths["log"].first)
